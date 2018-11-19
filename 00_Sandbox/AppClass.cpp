@@ -83,8 +83,9 @@ void Application::InitVariables(void)
 	m_sound.setBuffer(m_soundBuffer);
 
 	//load model
-	m_pModel = new Simplex::Model();
-	m_pModel->Load("Lego\\Unikitty.BTO");
+	//MyMesh* mesh = new MyMesh();
+	//m_pMode = mesh->GenerateCube(5.0f,C_BLUE);
+	//m_pModel->Load("Lego\\Unikitty.BTO");
 #pragma endregion
 }
 void Application::Update(void)
@@ -109,7 +110,7 @@ void Application::Update(void)
 	m_pLightMngr->SetPosition(v3Position, 1); //set the position of first light(0 is reserved for global light)
 	m_pLightMngr->SetIntensity(5.0f, 1); //set the intensity of first light
 	m_pLightMngr->SetColor(v3Color, 1); //set the color of first light
-	m_pMeshMngr->AddSphereToRenderList(glm::translate(v3Position) * glm::scale(vector3(0.15f)), v3Color, RENDER_SOLID); //add a sphere to "see" it
+	//m_pMeshMngr->AddSphereToRenderList(glm::translate(v3Position) * glm::scale(vector3(0.15f)), v3Color, RENDER_SOLID); //add a sphere to "see" it
 }
 void Application::Display(void)
 {
@@ -118,11 +119,17 @@ void Application::Display(void)
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
+
+	//cubes use matrices to move them, and rotate them
+	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4,C_BLUE,1);
+	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4, C_WHITE, 1);
+	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4, C_MAGENTA, 1);
+	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4, C_YELLOW, 1);
 	
 	// set the model matrix of the model
-	m_pModel->SetModelMatrix(ToMatrix4(m_qArcBall));
+	//m_pModel->SetModelMatrix(ToMatrix4(m_qArcBall));
 	//play the default sequence of the model
-	m_pModel->PlaySequence();
+	//m_pModel->PlaySequence();
 	
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
