@@ -1,4 +1,5 @@
 #include "MyMesh.h"
+
 void MyMesh::Init(void)
 {
 	m_bBinded = false;

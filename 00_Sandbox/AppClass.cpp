@@ -121,10 +121,19 @@ void Application::Display(void)
 	m_pMeshMngr->AddSkyboxToRenderList();
 
 	//cubes use matrices to move them, and rotate them
-	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4,C_BLUE,1);
+	
+	/*m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4,C_BLUE,1);
 	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4, C_WHITE, 1);
 	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4, C_MAGENTA, 1);
 	m_pMeshMngr->AddCubeToRenderList(IDENTITY_M4, C_YELLOW, 1);
+	*/
+	GameObject** f = new GameObject*[20];
+	for (size_t i = 0; i < 20; i++)
+	{
+		f[i] = new GameObject(vector3((int)i));
+		f[i]->Update();
+		f[i]->Display();
+	}
 	
 	// set the model matrix of the model
 	//m_pModel->SetModelMatrix(ToMatrix4(m_qArcBall));
