@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="AppClass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AppClassControls.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AppClassGUI.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AppClassMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerConfiguration.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui_demo.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui_draw.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEntityManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyOctant.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRigidBody.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AppClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerConfiguration.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Definitions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imconfig.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imgui.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imgui_internal.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\ImGuiObject.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEntityManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyOctant.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRigidBody.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\res\resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{eceafd0a-bdbc-40ee-9b8f-87b803671494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{082615be-609a-43d1-a3e8-20292079e0ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{ec8ecd69-8677-4c15-a072-e1cc44fa4d5c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\res\BTO.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
