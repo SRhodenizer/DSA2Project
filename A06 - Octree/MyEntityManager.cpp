@@ -1,7 +1,10 @@
 #include "MyEntityManager.h"
 #include "MyOctant.h"
+#include <glm/gtx/matrix_decompose.hpp>
 using namespace Simplex;
 //  MyEntityManager
+
+
 Simplex::MyEntityManager* Simplex::MyEntityManager::m_pInstance = nullptr;
 
 MyEntity** Simplex::MyEntityManager::GetEntityList(void) 
@@ -13,6 +16,7 @@ void Simplex::MyEntityManager::Init(void)
 {
 	m_uEntityCount = 0;
 	m_mEntityArray = nullptr;
+	m_pCameraMngr = CameraManager::GetInstance(); //Singleton for the camera manager
 }
 void Simplex::MyEntityManager::Release(void)
 {
@@ -174,6 +178,19 @@ Simplex::MyEntityManager::~MyEntityManager(){Release();};
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
+
+	for (uint i = 0; i < m_uEntityCount; i++)
+	{
+		matrix4 Rotation = m_pCameraMngr->GetCameraSpace();
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::decompose(Rotation, scale, rotation, translation, skew, perspective);
+		
+		//m_mEntityArray[i]->SetModelMatrix(m_mEntityArray[i]->startingMatrix*glm::toMat4(rotation)*glm::toMat4(quaternion(0, 0, 0.7071068, 0.7071068)));
+	}
 	//Clear all collisions
 	/*for (uint i = 0; i < m_uEntityCount; i++)
 	{

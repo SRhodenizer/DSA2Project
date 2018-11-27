@@ -12,7 +12,7 @@ void Application::InitVariables(void)
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
 
 #ifdef DEBUG
-	uint uInstances = 900;
+	uint uInstances = 40;
 #else
 	uint uInstances = 1849;
 #endif
@@ -24,7 +24,7 @@ void Application::InitVariables(void)
 		for (int j = 0; j < nSquare; j++)
 		{
 			uIndex++;
-			m_pEntityMngr->AddEntity("Minecraft\\Cube.obj");
+			m_pEntityMngr->AddEntity("Minecraft\\Plate.obj");
 			std::cout << m_pEntityMngr->GetEntityCount() << "\n";
 			vector3 v3Position = vector3(glm::sphericalRand(34.0f));
 			matrix4 m4Position = glm::translate(v3Position);

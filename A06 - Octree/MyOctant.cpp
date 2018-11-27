@@ -254,7 +254,7 @@ void MyOctant::Display(vector3 a_v3Color)
 {
 	if (IsLeaf()) 
 	{
-		for (int i = 0; i < entityCount; i++)
+/*		for (int i = 0; i < entityCount; i++)
 		{
 			(m_EntityList[i])->GetRigidBody()->ClearCollidingList();
 		}
@@ -272,7 +272,7 @@ void MyOctant::Display(vector3 a_v3Color)
 					
 				}
 			}
-		}
+		}*/
 		matrix4 octBox = glm::translate(m_v3Center) * glm::scale(vector3(m_v3Max.x - m_v3Min.x, m_v3Max.y - m_v3Min.y, m_v3Max.z - m_v3Min.z));
 		m_pMeshMngr->AddWireCubeToRenderList(octBox, a_v3Color, 1);
 	}

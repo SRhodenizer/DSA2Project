@@ -30,6 +30,7 @@ class MyEntity
 	
 
 public:
+	matrix4 startingMatrix;
 	static uint number;
 	/*
 	Usage: Constructor that specifies the name attached to the MyEntity

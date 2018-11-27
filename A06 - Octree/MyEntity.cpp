@@ -3,6 +3,7 @@ using namespace Simplex;
 std::map<String, MyEntity*> MyEntity::m_IDMap;
 uint MyEntity::number;
 //  Accessors
+
 matrix4 Simplex::MyEntity::GetModelMatrix(void){ return m_m4ToWorld; }
 void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 {
@@ -30,6 +31,7 @@ void Simplex::MyEntity::Init(void)
 	m_m4ToWorld = IDENTITY_M4;
 	m_sUniqueID = "";
 	m_nDimensionCount = 0;
+
 }
 void Simplex::MyEntity::Swap(MyEntity& other)
 {
@@ -73,6 +75,7 @@ Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
 		m_bInMemory = true; //mark this entity as viable
 	}
+	startingMatrix = GetModelMatrix();
 }
 Simplex::MyEntity::MyEntity(MyEntity const& other)
 {
