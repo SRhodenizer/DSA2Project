@@ -1,6 +1,6 @@
 #include "AppClass.h"
 using namespace Simplex;
-
+int timer = 0;
 void Application::InitVariables(void)
 {
 	//Set the position and target of the camera
@@ -12,7 +12,7 @@ void Application::InitVariables(void)
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
 
 #ifdef DEBUG
-	uint uInstances = 40;
+	uint uInstances = 80;
 #else
 	uint uInstances = 1849;
 #endif
@@ -24,9 +24,10 @@ void Application::InitVariables(void)
 		for (int j = 0; j < nSquare; j++)
 		{
 			uIndex++;
-			m_pEntityMngr->AddEntity("Minecraft\\Plate.obj");
+			char name[7] = { 'p','l','a','t','e',j };
+			m_pEntityMngr->AddEntity("Minecraft\\Plate.obj",name, true);
 			std::cout << m_pEntityMngr->GetEntityCount() << "\n";
-			vector3 v3Position = vector3(glm::sphericalRand(34.0f));
+			vector3 v3Position = vector3(glm::diskRand(34.0f),0.0f);
 			matrix4 m4Position = glm::translate(v3Position);
 			m_pEntityMngr->SetModelMatrix(m4Position);
 		}
@@ -43,6 +44,7 @@ void Application::InitVariables(void)
 }
 void Application::Update(void)
 {
+	timer++;
 	
 	//Update the system so it knows how much time has passed since the last call
 	m_pSystem->Update();
@@ -56,6 +58,10 @@ void Application::Update(void)
 	
 	//Update Entity Manager
 	m_pEntityMngr->Update();
+	if (timer == 60)
+	{
+		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", "bullet0", false);
+	}
 	
 	//Add objects to render list
 	m_pEntityMngr->AddEntityToRenderList(-1, true);

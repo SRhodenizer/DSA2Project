@@ -1,6 +1,7 @@
 #include "MyEntityManager.h"
 #include "MyOctant.h"
 #include <glm/gtx/matrix_decompose.hpp>
+#include <random>
 using namespace Simplex;
 //  MyEntityManager
 
@@ -17,6 +18,11 @@ void Simplex::MyEntityManager::Init(void)
 	m_uEntityCount = 0;
 	m_mEntityArray = nullptr;
 	m_pCameraMngr = CameraManager::GetInstance(); //Singleton for the camera manager
+	maxSize.push_back(16);
+	maxSize.push_back(16);
+	layerCounts.push_back(0);
+	layerCounts.push_back(0);
+
 }
 void Simplex::MyEntityManager::Release(void)
 {
@@ -160,6 +166,7 @@ void Simplex::MyEntityManager::SetAxisVisibility(bool a_bVisibility, String a_sU
 }
 void Simplex::MyEntityManager::SetModelMatrix(matrix4 a_m4ToWorld, uint a_uIndex)
 {
+
 	//if the list is empty return
 	if (m_uEntityCount == 0)
 		return;
@@ -169,6 +176,7 @@ void Simplex::MyEntityManager::SetModelMatrix(matrix4 a_m4ToWorld, uint a_uIndex
 		a_uIndex = m_uEntityCount - 1;
 
 	m_mEntityArray[a_uIndex]->SetModelMatrix(a_m4ToWorld);
+	m_mEntityArray[a_uIndex]->currentMatrix = a_m4ToWorld;
 }
 //The big 3
 Simplex::MyEntityManager::MyEntityManager(){Init();}
@@ -181,18 +189,18 @@ void Simplex::MyEntityManager::Update(void)
 
 	for (uint i = 0; i < m_uEntityCount; i++)
 	{
-		matrix4 Rotation = m_pCameraMngr->GetCameraSpace();
+		
 		glm::vec3 scale;
 		glm::quat rotation;
 		glm::vec3 translation;
 		glm::vec3 skew;
 		glm::vec4 perspective;
-		glm::decompose(Rotation, scale, rotation, translation, skew, perspective);
 		
-		//m_mEntityArray[i]->SetModelMatrix(m_mEntityArray[i]->startingMatrix*glm::toMat4(rotation)*glm::toMat4(quaternion(0, 0, 0.7071068, 0.7071068)));
+		glm::decompose(m_mEntityArray[i]->currentMatrix, scale, rotation, translation, skew, perspective);
+		SetModelMatrix(glm::translate(translation)*glm::toMat4(quaternion(0, 0, 0.7071068, 0.7071068)),i);
 	}
 	//Clear all collisions
-	/*for (uint i = 0; i < m_uEntityCount; i++)
+	for (uint i = 0; i < m_uEntityCount; i++)
 	{
 		m_mEntityArray[i]->ClearCollisionList();
 	}
@@ -200,16 +208,65 @@ void Simplex::MyEntityManager::Update(void)
 	//check collisions
 	for (uint i = 0; i < m_uEntityCount - 1; i++)
 	{
-		for (uint j = i + 1; j < m_uEntityCount; j++)
+		for (size_t layerIndex = 0; layerIndex < m_mEntityArray[i]->layerList.size(); layerIndex++)
 		{
-			m_mEntityArray[i]->IsColliding(m_mEntityArray[j]);
+			for (uint j = 0; j < layerCounts[m_mEntityArray[i]->layerList[layerIndex]]; j++)
+			{
+				if(i!=j)
+					if (m_mEntityArray[i]->IsColliding(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]))
+					{
+						RemoveEntity(GetEntityIndex(m_mEntityArray[i]->GetUniqueID()));
+						
+						//RemoveEntity(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]->GetUniqueID());
+					}
+			}
 		}
-	}*/
+		
+	}
 }
-void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
+
+void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, bool isPlate)
 {
+	
 	//Create a temporal entity to store the object
 	MyEntity* pTemp = new MyEntity(a_sFileName, a_sUniqueID);
+	if (collisionLayers.size() == 0) 
+	{
+		collisionLayers.push_back(new MyEntity*[16]);
+		collisionLayers.push_back(new MyEntity*[16]);
+	}
+	if (isPlate) 
+	{
+		collisionLayers[0][layerCounts[0]] = (pTemp);
+		pTemp->layerList.push_back(1);
+		layerCounts[0]++;
+		if (layerCounts[0] >= maxSize[0]) 
+		{
+			maxSize[0] *= 2;
+			MyEntity** temp = new MyEntity*[maxSize[0]];
+			for (size_t i = 0; i < layerCounts[0]; i++)
+			{
+				temp[i] = collisionLayers[0][i];
+			}
+			collisionLayers[0] = temp;
+		}
+	}
+	else
+	{
+		collisionLayers[1][layerCounts[1]] = (pTemp);
+		pTemp->layerList.push_back(0);
+		layerCounts[1]++;
+		if (layerCounts[1] >= maxSize[1])
+		{
+			maxSize[1] *= 2;
+			MyEntity** temp = new MyEntity*[maxSize[1]];
+			for (size_t i = 0; i < layerCounts[1]; i++)
+			{
+				temp[i] = collisionLayers[1][i];
+			}
+			collisionLayers[1] = temp;
+		}
+	}
 	//if I was able to generate it add it to the list
 	if (pTemp->IsInitialized())
 	{

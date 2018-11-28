@@ -30,7 +30,8 @@ class MyEntity
 	
 
 public:
-	matrix4 startingMatrix;
+	std::vector<int> layerList; //list of layers that the object will collide with;
+	matrix4 currentMatrix;
 	static uint number;
 	/*
 	Usage: Constructor that specifies the name attached to the MyEntity

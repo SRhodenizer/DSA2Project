@@ -75,7 +75,7 @@ Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
 		m_bInMemory = true; //mark this entity as viable
 	}
-	startingMatrix = GetModelMatrix();
+	currentMatrix = GetModelMatrix();
 }
 Simplex::MyEntity::MyEntity(MyEntity const& other)
 {

@@ -254,7 +254,7 @@ void MyOctant::Display(vector3 a_v3Color)
 {
 	if (IsLeaf()) 
 	{
-/*		for (int i = 0; i < entityCount; i++)
+		/*for (int i = 0; i < entityCount; i++)
 		{
 			(m_EntityList[i])->GetRigidBody()->ClearCollidingList();
 		}
@@ -267,7 +267,14 @@ void MyOctant::Display(vector3 a_v3Color)
 				if (i != j) {
 					if (m_EntityList[i]->GetRigidBody()->IsColliding(m_EntityList[j]->GetRigidBody()))
 					{
-						
+						glm::vec3 scale;
+						glm::quat rotation;
+						glm::vec3 translation;
+						glm::vec3 skew;
+						glm::vec4 perspective;
+
+						glm::decompose(m_EntityList[i]->currentMatrix, scale, rotation, translation, skew, perspective);
+						std::cout<<(translation.x)<<" "<<translation.y<<" "<<translation.z<<"\n";
 					}
 					
 				}
