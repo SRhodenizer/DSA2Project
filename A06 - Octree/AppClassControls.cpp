@@ -19,6 +19,15 @@ void Application::ProcessMousePressed(sf::Event a_event)
 	default: break;
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = true;
+
+		//shoots bullet
+		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", "bullet0", false);
+
+		m_pEntityMngr->SetModelMatrix(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->GetModelMatrix()*glm::translate(vector3(0, 0, 60))*glm::scale(IDENTITY_M4, glm::vec3(.5f, .5f, .5f)), m_pEntityMngr->GetEntityIndex("bullet0"));
+		//scales bullet 
+		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->velocity = vector3(0, 0, -1);
+		
+		
 		break;
 	case sf::Mouse::Button::Middle:
 		gui.m_bMousePressed[1] = true;

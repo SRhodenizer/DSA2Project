@@ -19,13 +19,14 @@ namespace Simplex
 	//Adding Application to the Simplex namespace
 class Application
 {
+
 	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
 	MyOctant* m_pRoot = nullptr;
 	uint m_uOctantID = -1; //Index of Octant to display
 	uint m_uObjects = 0; //Number of objects in the scene
 	uint m_uOctantLevels = 0; //Number of levels in the octree
 private:
-	String m_sProgrammer = "Chris Commisso - cfc5762@rit.edu"; //programmer
+	String m_sProgrammer = "Chris Commisso - cfc5762@rit.edu Stephen Rhodenizer - scr3876@rit.edu"; //programmer
 
 	static ImGuiObject gui; //GUI object
 	bool m_bGUI_Main = true; //show Main GUI window?

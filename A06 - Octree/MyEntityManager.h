@@ -22,6 +22,7 @@ class MyEntityManager
 	std::vector<int> layerCounts;
 	std::vector<int> maxSize;
 public:
+	int score = 0; //score for shooting plates 
 	MyEntity** GetEntityList(void);
 	/*
 	Usage: Gets the singleton pointer

@@ -4,7 +4,7 @@
 #include <random>
 using namespace Simplex;
 //  MyEntityManager
-
+int score;
 
 Simplex::MyEntityManager* Simplex::MyEntityManager::m_pInstance = nullptr;
 
@@ -229,7 +229,7 @@ void Simplex::MyEntityManager::Update(void)
 					if (m_mEntityArray[i]->IsColliding(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]))
 					{
 						RemoveEntity(GetEntityIndex(m_mEntityArray[i]->GetUniqueID()));
-						
+						score += 50;//adds to score
 						//RemoveEntity(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]->GetUniqueID());
 					}
 			}

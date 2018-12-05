@@ -24,14 +24,28 @@ void Application::InitVariables(void)
 		for (int j = 1; j < nSquare+1; j++)
 		{
 			uIndex++;
-			char name[7] = { 'p','l','a','t','e',j };
+			char name[7] = { 'p','l','a','t','e', j };//gives each plate a unique id
 			m_pEntityMngr->AddEntity("Minecraft\\Plate.obj",name, true);
 			std::cout << m_pEntityMngr->GetEntityCount() << "\n";
-			vector3 v3Position = vector3(glm::diskRand(34.0f),0.0f);
+			vector3 v3Position;
+			//dynamically places the plates 
+			if(j + i * nSquare>30)
+			v3Position = vector3(((j%10)-5)*3,4*3,0);
+			else if (j+i*nSquare>20)
+		    v3Position = vector3(((j % 10) - 5)*3, 3*3, 0);
+			else if (j + i * nSquare>10)
+		    v3Position = vector3(((j % 10) - 5)*3, 2*3, 0);
+			else
+		    v3Position = vector3(((j % 10) - 5)*3, 1*3, 0);
+
 			matrix4 m4Position = glm::translate(v3Position);
 			m_pEntityMngr->SetModelMatrix(m4Position);
 		}
 	}
+
+	//makes the gun - needs to be repositioned but it work
+	//m_pEntityMngr->AddEntity("Minecraft\\gun.obj", "gun", true);
+
 	m_pEntityMngr->Update();
 
 
@@ -52,14 +66,14 @@ void Application::Update(void)
 	
 	//Update Entity Manager
 	m_pEntityMngr->Update();
-	if (timer == 60)
+	/*if (timer == 60)
 	{
 		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", "bullet0", false);
 		
 		m_pEntityMngr->SetModelMatrix(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->GetModelMatrix()*glm::translate(vector3(0,0,60))*glm::scale(IDENTITY_M4, glm::vec3(.5f, .5f, .5f)), m_pEntityMngr->GetEntityIndex("bullet0"));
 		//scales bullet 
 		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->velocity = vector3(0, 0, -1);
-	}
+	}*/
 	
 	//Add objects to render list
 	m_pEntityMngr->AddEntityToRenderList(-1, true);
