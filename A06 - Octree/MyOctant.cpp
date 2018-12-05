@@ -366,7 +366,8 @@ MyOctant* MyOctant::GetParent(void)
 bool MyOctant::IsLeaf(void) 
 {
 	//if there are no children
-	if (m_uChildren == 0) 
+	if (m_uChildren 
+		== 0) 
 	{
 		return true;//yes
 	}

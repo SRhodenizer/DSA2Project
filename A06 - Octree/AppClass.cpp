@@ -21,7 +21,7 @@ void Application::InitVariables(void)
 	uint uIndex = -1;
 	for (int i = 0; i < nSquare; i++)
 	{
-		for (int j = 0; j < nSquare; j++)
+		for (int j = 1; j < nSquare+1; j++)
 		{
 			uIndex++;
 			char name[7] = { 'p','l','a','t','e',j };
@@ -32,14 +32,8 @@ void Application::InitVariables(void)
 			m_pEntityMngr->SetModelMatrix(m4Position);
 		}
 	}
-	m_uOctantLevels = 1;//levels in the octree 0 = root, 1 = first set of children
 	m_pEntityMngr->Update();
-	m_pRoot = new MyOctant(1, 6);//makes the root Octant
-	MyEntity** list = m_pEntityMngr->GetEntityList();
-	for (int i = 0; i < m_pEntityMngr->GetEntityCount(); i++)
-	{
-		m_pRoot->Add((list[i]));
-	}
+
 
 }
 void Application::Update(void)
@@ -61,6 +55,10 @@ void Application::Update(void)
 	if (timer == 60)
 	{
 		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", "bullet0", false);
+		
+		m_pEntityMngr->SetModelMatrix(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->GetModelMatrix()*glm::translate(vector3(0,0,60))*glm::scale(IDENTITY_M4, glm::vec3(.5f, .5f, .5f)), m_pEntityMngr->GetEntityIndex("bullet0"));
+		//scales bullet 
+		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->velocity = vector3(0, 0, -1);
 	}
 	
 	//Add objects to render list
@@ -71,7 +69,7 @@ void Application::Display(void)
 	// Clear the screen
 	ClearScreen();
 	//display octree
-	m_pRoot->Display(C_YELLOW);
+	//m_pRoot->Display(C_YELLOW);
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();

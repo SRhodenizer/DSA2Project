@@ -197,7 +197,20 @@ void Simplex::MyEntityManager::Update(void)
 		glm::vec4 perspective;
 		
 		glm::decompose(m_mEntityArray[i]->currentMatrix, scale, rotation, translation, skew, perspective);
-		SetModelMatrix(glm::translate(translation)*glm::toMat4(quaternion(0, 0, 0.7071068, 0.7071068)),i);
+		if (m_mEntityArray[i]->GetUniqueID()[0] == 'b')//is a bullet
+		{
+			
+			rotation = glm::lookAt(
+				translation + m_mEntityArray[i]->velocity,
+				translation,
+				vector3(0.0f, 1.0f, 0.0f));
+			SetModelMatrix(glm::translate(translation+m_mEntityArray[i]->velocity)*glm::toMat4(rotation)*glm::scale(IDENTITY_M4, scale), i);
+		}
+		else if (m_mEntityArray[i]->GetUniqueID()[0] == 'p')//is a plate
+		{
+			SetModelMatrix(glm::translate(translation)*glm::toMat4(quaternion(0, 0, 0.7071068, 0.7071068))*glm::scale(IDENTITY_M4, scale), i);
+			
+		}
 	}
 	//Clear all collisions
 	for (uint i = 0; i < m_uEntityCount; i++)

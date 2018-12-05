@@ -27,9 +27,13 @@ class MyEntity
 	MeshManager* m_pMeshMngr = nullptr; //For rendering shapes
 
 	static std::map<String, MyEntity*> m_IDMap; //a map of the unique ID's
+
+	//movement properties 
+	
 	
 
 public:
+	vector3 velocity;
 	std::vector<int> layerList; //list of layers that the object will collide with;
 	matrix4 currentMatrix;
 	static uint number;
