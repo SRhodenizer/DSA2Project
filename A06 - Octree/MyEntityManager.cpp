@@ -6,6 +6,12 @@ using namespace Simplex;
 //  MyEntityManager
 int score;
 
+//the number of current plates 
+int numPlates = 0;
+
+bool runCollisions = true;
+
+
 Simplex::MyEntityManager* Simplex::MyEntityManager::m_pInstance = nullptr;
 
 MyEntity** Simplex::MyEntityManager::GetEntityList(void) 
@@ -21,6 +27,7 @@ void Simplex::MyEntityManager::Init(void)
 	maxSize.push_back(16);
 	maxSize.push_back(16);
 	layerCounts.push_back(0);
+	layerCounts.push_back(0); 
 	layerCounts.push_back(0);
 
 }
@@ -186,10 +193,13 @@ Simplex::MyEntityManager::~MyEntityManager(){Release();};
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
-
+	if (numPlates == 0)
+	{
+		endGame = true;
+	}
 	for (uint i = 0; i < m_uEntityCount; i++)
 	{
-		
+		//needed for matrix decomposition
 		glm::vec3 scale;
 		glm::quat rotation;
 		glm::vec3 translation;
@@ -199,11 +209,18 @@ void Simplex::MyEntityManager::Update(void)
 		glm::decompose(m_mEntityArray[i]->currentMatrix, scale, rotation, translation, skew, perspective);
 		if (m_mEntityArray[i]->GetUniqueID()[0] == 'b')//is a bullet
 		{
-			
+			//rotate bullet to look at it's future position
+			vector3 secVel = m_mEntityArray[i]->velocity;
+			vector3 forward = glm::normalize(m_mEntityArray[i]->velocity);
+			vector3 right = glm::cross(forward, vector3(0, 1, 0));
 			rotation = glm::lookAt(
 				translation + m_mEntityArray[i]->velocity,
 				translation,
-				vector3(0.0f, 1.0f, 0.0f));
+				glm::cross(right, forward));
+			rotation.y *= -1;
+			rotation.x *= -1;
+			rotation.z *= -1;
+			//go to your future position
 			SetModelMatrix(glm::translate(translation+m_mEntityArray[i]->velocity)*glm::toMat4(rotation)*glm::scale(IDENTITY_M4, scale), i);
 		}
 		else if (m_mEntityArray[i]->GetUniqueID()[0] == 'p')//is a plate
@@ -219,26 +236,40 @@ void Simplex::MyEntityManager::Update(void)
 	}
 
 	//check collisions
-	for (uint i = 0; i < m_uEntityCount - 1; i++)
+	if(runCollisions)
+	for (uint i = 0; i < m_uEntityCount - 1; i++)//iterate through objects
 	{
-		for (size_t layerIndex = 0; layerIndex < m_mEntityArray[i]->layerList.size(); layerIndex++)
+		
+		for (size_t layerIndex = 0; layerIndex < m_mEntityArray[i]->layerList.size(); layerIndex++)//iterate through layers
 		{
-			for (uint j = 0; j < layerCounts[m_mEntityArray[i]->layerList[layerIndex]]; j++)
-			{
-				if(i!=j)
-					if (m_mEntityArray[i]->IsColliding(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]))
+			
+				for (uint j = 0; j < layerCounts[m_mEntityArray[i]->layerList[layerIndex]]; j++)
+				{
+					if(numPlates>0)
+					if (m_mEntityArray[i]->layerList.size() > 0 && m_mEntityArray[i]->IsColliding(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]))
 					{
-						RemoveEntity(GetEntityIndex(m_mEntityArray[i]->GetUniqueID()));
+						
+						if (m_mEntityArray[i]->GetUniqueID()[0] == 'p')
+						{
+							numPlates--;
+						}
+						RemoveEntity(GetEntityIndex(m_mEntityArray[i]->GetUniqueID()));//destroys plate and bullet 
 						score += 50;//adds to score
+						
+						
 						//RemoveEntity(collisionLayers[m_mEntityArray[i]->layerList[layerIndex]][j]->GetUniqueID());
 					}
+					if (m_mEntityArray[i] != nullptr && m_mEntityArray[i]->layerList.size() < 1) {
+						break;
+					}
+				}
 			}
 		}
 		
 	}
-}
 
-void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, bool isPlate)
+
+void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, int isPlate)
 {
 	
 	//Create a temporal entity to store the object
@@ -247,9 +278,11 @@ void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID,
 	{
 		collisionLayers.push_back(new MyEntity*[16]);
 		collisionLayers.push_back(new MyEntity*[16]);
+		collisionLayers.push_back(new MyEntity*[16]);
 	}
-	if (isPlate) 
+	if (isPlate == 0) 
 	{
+		numPlates++;
 		collisionLayers[0][layerCounts[0]] = (pTemp);
 		pTemp->layerList.push_back(1);
 		layerCounts[0]++;
@@ -264,7 +297,7 @@ void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID,
 			collisionLayers[0] = temp;
 		}
 	}
-	else
+	else if(isPlate == 1)
 	{
 		collisionLayers[1][layerCounts[1]] = (pTemp);
 		pTemp->layerList.push_back(0);
@@ -279,6 +312,11 @@ void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID,
 			}
 			collisionLayers[1] = temp;
 		}
+	}
+	else if (isPlate == 3) 
+	{
+		collisionLayers[2][layerCounts[2]] = (pTemp);
+		layerCounts[2]++;
 	}
 	//if I was able to generate it add it to the list
 	if (pTemp->IsInitialized())

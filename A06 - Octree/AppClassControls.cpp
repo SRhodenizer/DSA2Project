@@ -1,5 +1,18 @@
 #include "AppClass.h"
 using namespace Simplex;
+
+//needed for matrix decomposition
+glm::vec3 d_scale;
+glm::quat d_rotation;
+glm::vec3 d_translation;
+glm::vec3 d_skew;
+glm::vec4 d_perspective;
+
+//number of bullets fired 
+int bulletCount = 0;
+char name[10] = { 'b','u','l','l','e','t',(char)bulletCount };
+
+
 //Mouse
 void Application::ProcessMouseMovement(sf::Event a_event)
 {
@@ -14,18 +27,40 @@ void Application::ProcessMouseMovement(sf::Event a_event)
 }
 void Application::ProcessMousePressed(sf::Event a_event)
 {
+	
 	switch (a_event.mouseButton.button)
 	{
 	default: break;
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = true;
 
-		//shoots bullet
-		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", "bullet0", false);
 
-		m_pEntityMngr->SetModelMatrix(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->GetModelMatrix()*glm::translate(vector3(0, 0, 60))*glm::scale(IDENTITY_M4, glm::vec3(.5f, .5f, .5f)), m_pEntityMngr->GetEntityIndex("bullet0"));
+		bulletCount++;
+		name[0] = 'b';
+		name[1] = 'u';
+		name[2] = 'l';
+		name[3] = 'l';
+		name[4] = 'e';
+		name[5] = 't';
+		name[6] = (char)bulletCount+48;
+		//shoots bullet
+		for (size_t i = 0; i < m_pEntityMngr->GetEntityCount(); i++)
+		{
+			if (m_pEntityMngr->GetEntity(i)->GetUniqueID() == name) 
+			{
+				m_pEntityMngr->RemoveEntity(i);
+			}
+		}
+		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", name, 1);
+
 		//scales bullet 
-		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->velocity = vector3(0, 0, -1);
+		m_pEntityMngr->SetModelMatrix(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(name))->GetModelMatrix()*glm::translate(m_pCameraMngr->GetCamera(m_pCameraMngr->GetActiveCamera())->GetPosition())*glm::scale(IDENTITY_M4, glm::vec3(.02f, .02f, .02f)), m_pEntityMngr->GetEntityIndex(name));
+
+		//decomposes bullet model matrix
+		glm::decompose(m_pCameraMngr->GetCamera(m_pCameraMngr->GetActiveCamera())->GetCameraSpace(), d_scale, d_rotation, d_translation, d_skew, d_perspective);
+
+		//moves bullet
+		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(name))->velocity = (vector3(0, 0, -1)*d_rotation);
 		
 		
 		break;
@@ -35,7 +70,7 @@ void Application::ProcessMousePressed(sf::Event a_event)
 		break;
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = true;
-		m_bFPC = true;
+		m_bFPC = false;
 		break;
 	}
 
@@ -56,7 +91,7 @@ void Application::ProcessMouseReleased(sf::Event a_event)
 		break;
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = false;
-		m_bFPC = false;
+		m_bFPC = true;
 		break;
 	}
 

@@ -1,6 +1,8 @@
 #include "AppClass.h"
 using namespace Simplex;
 int timer = 0;
+
+
 void Application::InitVariables(void)
 {
 	//Set the position and target of the camera
@@ -11,11 +13,11 @@ void Application::InitVariables(void)
 
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
 
-#ifdef DEBUG
+
 	uint uInstances = 80;
-#else
-	uint uInstances = 1849;
-#endif
+
+	m_bFPC = true;
+
 	int nSquare = static_cast<int>(std::sqrt(uInstances));
 	m_uObjects = nSquare * nSquare;
 	uint uIndex = -1;
@@ -24,8 +26,8 @@ void Application::InitVariables(void)
 		for (int j = 1; j < nSquare+1; j++)
 		{
 			uIndex++;
-			char name[7] = { 'p','l','a','t','e', j };//gives each plate a unique id
-			m_pEntityMngr->AddEntity("Minecraft\\Plate.obj",name, true);
+			char name[7] = { 'p','l','a','t','e', j+48 };//gives each plate a unique id
+			m_pEntityMngr->AddEntity("Minecraft\\Plate.obj",name, 0);
 			std::cout << m_pEntityMngr->GetEntityCount() << "\n";
 			vector3 v3Position;
 			//dynamically places the plates 
@@ -43,17 +45,18 @@ void Application::InitVariables(void)
 		}
 	}
 
-	//makes the gun - needs to be repositioned but it work
-	//m_pEntityMngr->AddEntity("Minecraft\\gun.obj", "gun", true);
+	//makes the gun - needs to be repositioned in update
+	m_pEntityMngr->AddEntity("Minecraft\\gun.obj", "gun", 3);
 
+	
 	m_pEntityMngr->Update();
 
 
 }
 void Application::Update(void)
 {
-	timer++;
 	
+
 	//Update the system so it knows how much time has passed since the last call
 	m_pSystem->Update();
 
@@ -62,28 +65,27 @@ void Application::Update(void)
 
 	//Is the first person camera active?
 	CameraRotation();
-	//update octant collision
 	
+	//makes the gun appear in camera view 
+	m_pEntityMngr->SetModelMatrix(m_pCameraMngr->GetCamera(m_pCameraMngr->GetActiveCamera())->GetCameraSpace()*glm::scale(IDENTITY_M4, glm::vec3(.5f, .5f, .5f)) * glm::translate(vector3(.3f, -1.f, -.9f))*glm::rotate((float)PI, vector3(0, 1, 0)), m_pEntityMngr->GetEntityIndex("gun"));
+
+
 	//Update Entity Manager
 	m_pEntityMngr->Update();
-	/*if (timer == 60)
-	{
-		m_pEntityMngr->AddEntity("Minecraft\\banzaibill.obj", "bullet0", false);
-		
-		m_pEntityMngr->SetModelMatrix(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->GetModelMatrix()*glm::translate(vector3(0,0,60))*glm::scale(IDENTITY_M4, glm::vec3(.5f, .5f, .5f)), m_pEntityMngr->GetEntityIndex("bullet0"));
-		//scales bullet 
-		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("bullet0"))->velocity = vector3(0, 0, -1);
-	}*/
 	
 	//Add objects to render list
 	m_pEntityMngr->AddEntityToRenderList(-1, true);
+
+	//ends the game 
+	if (m_pEntityMngr->endGame == true) 
+	{
+		m_bRunning = false;
+	}
 }
 void Application::Display(void)
 {
 	// Clear the screen
 	ClearScreen();
-	//display octree
-	//m_pRoot->Display(C_YELLOW);
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();

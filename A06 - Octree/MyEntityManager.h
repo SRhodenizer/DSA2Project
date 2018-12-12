@@ -21,7 +21,9 @@ class MyEntityManager
 	std::vector<MyEntity**> collisionLayers;
 	std::vector<int> layerCounts;
 	std::vector<int> maxSize;
+	
 public:
+	bool endGame;
 	int score = 0; //score for shooting plates 
 	MyEntity** GetEntityList(void);
 	/*
@@ -49,7 +51,7 @@ public:
 	-	String a_sUniqueID -> Name wanted as identifier, if not available will generate one
 	OUTPUT: ---
 	*/
-	void AddEntity(String a_sFileName, String a_sUniqueID = "NA", bool isPlate = false);
+	void AddEntity(String a_sFileName, String a_sUniqueID = "NA", int isPlate = 3);
 	/*
 	USAGE: Deletes the MyEntity Specified by unique ID and removes it from the list
 	ARGUMENTS: uint a_uIndex -> index of the queried entry, if < 0 asks for the last one added
