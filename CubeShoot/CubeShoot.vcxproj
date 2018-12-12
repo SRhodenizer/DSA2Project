@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,29 +11,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D96B0ECC-60B7-44C9-9E0F-243F30CB091C}</ProjectGuid>
-    <RootNamespace>VariableApplication</RootNamespace>
-    <ProjectName>VariableApplication</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{EF54588D-D6D5-446C-B107-A72BCF7AC12D}</ProjectGuid>
+    <RootNamespace>CubeShoot</RootNamespace>
+    <ProjectName>CubeShoot</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -45,34 +43,36 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)D</TargetName>
-    <ExecutablePath>$(SolutionDir)include\GL\bin;$(SolutionDir)include\SFML\bin;$(SolutionDir)include\Simplex\bin;$(SolutionDir)include\BasicX\bin;$(ExecutablePath)</ExecutablePath>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <ExecutablePath>$(SolutionDir)include\GL\bin;$(SolutionDir)include\Simplex\bin;$(SolutionDir)include\SFML\bin;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)include;$(SolutionDir)res;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\SFML\lib;$(SolutionDir)include\Simplex\lib;$(SolutionDir)include\BasicX\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\Simplex\lib;$(SolutionDir)include\SFML\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExecutablePath>$(SolutionDir)include\GL\bin;$(SolutionDir)include\SFML\bin;$(SolutionDir)include\Simplex\bin;$(SolutionDir)include\BasicX\bin;$(ExecutablePath)</ExecutablePath>
+    <TargetName>$(ProjectName)</TargetName>
+    <ExecutablePath>$(SolutionDir)include\GL\bin;$(SolutionDir)include\Simplex\bin;$(SolutionDir)include\SFML\bin;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)include;$(SolutionDir)res;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\SFML\lib;$(SolutionDir)include\Simplex\lib;$(SolutionDir)include\BasicX\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\Simplex\lib;$(SolutionDir)include\SFML\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Simplex_d.lib;BasicX_d.lib;glu32.lib;glew32.lib;opengl32.lib;sfml-system.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glu32.lib;glew32.lib;opengl32.lib;simplex_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)include\GL\bin" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\BasicX\bin" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\SFML\bin\sfml-system-d-2.dll" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\SFML\bin\sfml-window-d-2.dll" "$(SolutionDir)_Binary" /y</Command>
-      <Message>Copying files...</Message>
+      <Command>xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying Shaders...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,19 +82,19 @@ xcopy "$(SolutionDir)include\SFML\bin\sfml-window-d-2.dll" "$(SolutionDir)_Binar
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Simplex.lib;BasicX.lib;glu32.lib;glew32.lib;opengl32.lib;sfml-system.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glu32.lib;glew32.lib;opengl32.lib;simplex.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent />
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)include\GL\bin" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\BasicX\bin" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\SFML\bin\sfml-system-2.dll" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\SFML\bin\sfml-window-2.dll" "$(SolutionDir)_Binary" /y</Command>
       <Message>Copying files...</Message>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
+xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -104,15 +104,28 @@ xcopy "$(SolutionDir)include\SFML\bin\sfml-window-2.dll" "$(SolutionDir)_Binary"
     <ClCompile Include="AppClass.cpp" />
     <ClCompile Include="AppClassControls.cpp" />
     <ClCompile Include="AppClassGUI.cpp" />
+    <ClCompile Include="AppClassMain.cpp" />
+    <ClCompile Include="ControllerConfiguration.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MyEntity.cpp" />
+    <ClCompile Include="MyEntityManager.cpp" />
+    <ClCompile Include="MyRigidBody.cpp" />
+    <ClCompile Include="MyOctant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\imconfig.h" />
     <ClInclude Include="..\include\imgui\imgui.h" />
+    <ClInclude Include="..\include\imgui\ImGuiObject.h" />
     <ClInclude Include="..\include\imgui\imgui_internal.h" />
-    <ClInclude Include="..\res\Resource.h" />
+    <ClInclude Include="..\res\resource.h" />
     <ClInclude Include="AppClass.h" />
-    <ClInclude Include="ImGuiObject.h" />
+    <ClInclude Include="ControllerConfiguration.h" />
+    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="MyEntity.h" />
+    <ClInclude Include="MyEntityManager.h" />
+    <ClInclude Include="MyOctant.h" />
+    <ClInclude Include="MyRigidBody.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\res\BTO.rc" />
